@@ -3,16 +3,18 @@ const Article = require('./../models/article')
 const router = express.Router()
 
 router.get('/new', (req, res) => {
+    //this is render a new blank instead of one prefilled with failed article
     res.render('articles/new', {article: new Article()})
 })
 
-router.get('/:id', (res, req) => {
-
+router.get('/:id', (req, res) => {
+    //getting the id from the url
+    res.send(req.params.id);
 })
 
 router.post('/', async(req, res) => {
     // accessing the html body to make Article row
-    const article = new Article({
+    let article = new Article({
         title: req.body.title,
         description: req.body.description,
         markdown: req.body.markdown
@@ -26,7 +28,8 @@ router.post('/', async(req, res) => {
         res.redirect(`/articles/${article.id}`)
     } catch (e) {
         //else Stays on page passing through article to pass through the previous details
-        res.render('articles/new', {article:article})
+        //render failed article
+        res.render('articles/new', {article: article})
     }
     
 })
